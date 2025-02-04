@@ -109,7 +109,6 @@ with st.form("voucher_form"):
                 st.markdown("### Your Voucher Code:")
                 st.code(result, language="text")
                 st.info("Click the copy button in the top-right corner of the code box to copy your voucher.")
-                st.balloons()
             else:
                 st.error(result)
 
