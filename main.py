@@ -15,11 +15,11 @@ if 'initialized' not in st.session_state:
     st.session_state.initialized = True
     if not os.path.exists('data'):
         os.makedirs('data')
-    
+
     # Initialize vouchers.csv if it doesn't exist
     if not os.path.exists('data/vouchers.csv'):
         pd.DataFrame(columns=['voucher_code', 'assigned']).to_csv('data/vouchers.csv', index=False)
-    
+
     # Initialize mappings.csv if it doesn't exist
     if not os.path.exists('data/mappings.csv'):
         pd.DataFrame(columns=['timestamp', 'full_name', 'voucher_code']).to_csv('data/mappings.csv', index=False)
@@ -42,20 +42,25 @@ def assign_voucher(full_name):
     """Assign a voucher to a user"""
     vouchers_df = load_vouchers()
     mappings_df = load_mappings()
-    
+
+    # Check if user already has a voucher
+    existing_mapping = mappings_df[mappings_df['full_name'] == full_name]
+    if len(existing_mapping) > 0:
+        return True, existing_mapping.iloc[0]['voucher_code']
+
     # Check if there are available vouchers
     available_vouchers = vouchers_df[vouchers_df['assigned'] == False]
-    
+
     if len(available_vouchers) == 0:
         return False, "No vouchers available"
-    
+
     # Get the first available voucher
     voucher_code = available_vouchers.iloc[0]['voucher_code']
-    
+
     # Mark voucher as assigned
     vouchers_df.loc[vouchers_df['voucher_code'] == voucher_code, 'assigned'] = True
     vouchers_df.to_csv('data/vouchers.csv', index=False)
-    
+
     # Record the mapping
     new_mapping = pd.DataFrame({
         'timestamp': [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
@@ -64,7 +69,7 @@ def assign_voucher(full_name):
     })
     mappings_df = pd.concat([mappings_df, new_mapping], ignore_index=True)
     mappings_df.to_csv('data/mappings.csv', index=False)
-    
+
     return True, voucher_code
 
 # Header
@@ -93,7 +98,7 @@ st.markdown("Enter your full name to receive a unique voucher code.")
 with st.form("voucher_form"):
     full_name = st.text_input("Full Name")
     submit_button = st.form_submit_button("Get Voucher")
-    
+
     if submit_button:
         if not full_name.strip():
             st.error("Please enter your full name")
