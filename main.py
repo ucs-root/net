@@ -74,7 +74,7 @@ def assign_voucher(full_name):
 
 # Initialize admin password in session state
 if 'admin_password' not in st.session_state:
-    st.session_state.admin_password = 'admin123'  # You should change this to a secure password
+    st.session_state.admin_password = 'ucs.ke'  # Modified admin password
 
 # Header
 st.title("🎫 Urafiki Captive Portal")
