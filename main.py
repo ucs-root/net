@@ -100,7 +100,10 @@ with st.form("voucher_form"):
         else:
             success, result = assign_voucher(full_name.strip())
             if success:
-                st.success(f"Congratulations! Your voucher code is: {result}")
+                st.success("Congratulations! Your voucher has been assigned.")
+                st.markdown("### Your Voucher Code:")
+                st.code(result, language="text")
+                st.info("Click the copy button in the top-right corner of the code box to copy your voucher.")
                 st.balloons()
             else:
                 st.error(result)
