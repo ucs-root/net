@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Set page config
 st.set_page_config(
-    page_title="Voucher Distribution System",
+    page_title="Urafiki Captive Portal",
     page_icon="🎫",
     layout="centered"
 )
@@ -73,7 +73,7 @@ def assign_voucher(full_name):
     return True, voucher_code
 
 # Header
-st.title("🎫 Voucher Distribution System")
+st.title("🎫 Urafiki Captive Portal")
 st.markdown("---")
 
 # Admin section for uploading vouchers
